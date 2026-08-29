@@ -1,10 +1,10 @@
+import Homepage from "./pages/Homepage";
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <h1 className="text-5xl font-bold text-blue-500">
-        Hello React + Tailwind!
-      </h1>
-    </div>
+
+    <Homepage />
+
   )
 }
 
