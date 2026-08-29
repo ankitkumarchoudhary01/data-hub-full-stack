@@ -16,3 +16,39 @@ export const getPosts = async () => {
 
   return result.data;
 };
+
+
+export const createPost = async (postData) => {
+
+  const response = await fetch(`${API_BASE_URL}/posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to create post");
+  }
+
+  return result.data;
+};
+
+
+
+export const deletePost = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
+    method: "DELETE",
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to delete post");
+  }
+
+  return result.data;
+};

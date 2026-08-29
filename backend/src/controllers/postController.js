@@ -20,6 +20,8 @@ export const getPosts = async (req, res) => {
 // POST /posts
 export const createPost = async (req, res) => {
   try {
+    console.log("POST /posts body:", req.body);
+
     const { title, content, authorId } = req.body;
 
     const post = await Post.create({
@@ -94,7 +96,6 @@ export const getPostById = async (req, res) => {
     });
   }
 };
-
 
 export const getRecentPosts = async (req, res) => {
   try {
