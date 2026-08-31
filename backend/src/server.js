@@ -38,6 +38,11 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
 // Health check route
 app.get("/api/health", (req, res) => {
   res.status(200).json({
