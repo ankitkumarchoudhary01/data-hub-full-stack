@@ -1,4 +1,5 @@
 import Post from "../models/Post.js";
+import cloudinary from "../config/cloudinary.js";
 
 // GET /posts
 export const getPosts = async (req, res) => {
@@ -18,24 +19,59 @@ export const getPosts = async (req, res) => {
 };
 
 // POST /posts
+
 export const createPost = async (req, res) => {
   try {
-    console.log("POST /posts body:", req.body);
-
     const { title, content, authorId } = req.body;
+
+    if (!title || !content || !authorId) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, content, and author are required",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Image file is required",
+      });
+    }
+
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "the-data-hub",
+          resource_type: "image",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        },
+      );
+
+      uploadStream.end(req.file.buffer);
+    });
 
     const post = await Post.create({
       title,
       content,
       authorId,
+      image: uploadResult.secure_url,
     });
 
     res.status(201).json({
       success: true,
+      message: "Post created successfully",
       data: post,
     });
   } catch (error) {
-    res.status(400).json({
+    console.error("Error creating post:", error);
+
+    res.status(500).json({
       success: false,
       message: "Failed to create post",
       error: error.message,

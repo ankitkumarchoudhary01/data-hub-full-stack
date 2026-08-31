@@ -8,10 +8,12 @@ import {
   getRecentPosts,
 } from "../controllers/postController.js";
 
+import upload from "../middleware/upload.js";
+
 const router = express.Router();
 router.get("/recent", getRecentPosts);
 router.get("/", getPosts);
-router.post("/", createPost);
+router.post("/", upload.single("image"), createPost);
 router.delete("/:id", deletePost);
 router.get("/:id", getPostById);
 
